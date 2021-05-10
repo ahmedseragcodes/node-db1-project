@@ -9,15 +9,17 @@ const getById = id => {
           .where("id", id)
 }
 
-const getByAccountName = accountName => {
+const getByAccountName = (accountName) => {
   return db("accounts")
           .where("name", accountName)
 }
 
-const create = account => {
+const create = async (account) => {
   
-  return db("accounts")
-  .insert(account)
+  const newAccountId = await db("accounts")
+                      .insert(account)
+                    
+  return getById(newAccountId)
 
 }
 

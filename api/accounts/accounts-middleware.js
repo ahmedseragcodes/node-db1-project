@@ -30,19 +30,13 @@ exports.checkAccountPayload = (req, res, next) => {
 
 exports.checkAccountNameUnique = (req, res, next) => {
   
-  const { name } = req.body;
+  const name = req.body.name;
 
-  Accounts.getByAccountName(name.trim())
-  .then((fetchedAccount)=>{
-    if(fetchedAccount){
-      res.status(400).json({message: "that name is taken"});
-    } else {
-      next();
-    }
-  })
-  .catch((err)=>{
-    res.status(500).json({message: err.message});
-  })
+  if(Accounts.getByAccountName(name.trim()) > 0){
+    res.status(400).json({message: "that name is taken"});
+  } else {
+    next();
+  }
 }
 
 exports.checkAccountId = (req, res, next) => {
