@@ -29,9 +29,36 @@ exports.checkAccountPayload = (req, res, next) => {
 }
 
 exports.checkAccountNameUnique = (req, res, next) => {
-  // DO YOUR MAGIC
+  
+  const { name } = req.body;
+
+  Accounts.getByAccountName(name.trim())
+  .then((fetchedAccount)=>{
+    if(fetchedAccount){
+      res.status(400).json({message: "that name is taken"});
+    } else {
+      next();
+    }
+  })
+  .catch((err)=>{
+    res.status(500).json({message: err.message});
+  })
 }
 
 exports.checkAccountId = (req, res, next) => {
-  // DO YOUR MAGIC
+  
+  const { id } = req.params;
+
+  Accounts.getById(id)
+  .then((specificAccount)=>{
+    if(specificAccount){
+      next();
+    } else {
+      res.status(404).json({message: "account not found"});
+    }
+  })
+  .catch((err)=>{
+    res.status(500).json({message: err.message});
+  })
+
 }
